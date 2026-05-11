@@ -17,3 +17,28 @@ vars = { RESEND_API_KEY = "re_AmqHoEV1_PhyMRGbiZF8hCpSK5ZEEsG4G", ADMIN_EMAIL = 
 binding = "DB"
 database_name = "padariapanidigrano_db"
 database_id = "03ff9f8a-3a3b-408b-abe8-9088f4082d4c"
+
+# backend/worker/wrangler.toml
+name = "padariapanidigrano"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+
+# D1 Database
+[[d1_databases]]
+binding = "DB"
+database_name = "padariapanidigrano_db"
+database_id = "SEU_DATABASE_ID_AQUI"  # Você precisa pegar o ID
+
+# KV Namespaces
+[[kv_namespaces]]
+binding = "KV_AUTH"
+id = "SEU_KV_AUTH_ID"
+
+[[kv_namespaces]]
+binding = "KV_CACHE"
+id = "SEU_KV_CACHE_ID"
+
+# R2 Buckets
+[[r2_buckets]]
+binding = "R2_FILES"
+bucket_name = "padariapanidigrano-midias"

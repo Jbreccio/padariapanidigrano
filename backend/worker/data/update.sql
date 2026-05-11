@@ -1,1 +1,0 @@
-UPDATE users SET nome = 'BetoBreccio' WHERE email = 'oibreccio@gmail.com';

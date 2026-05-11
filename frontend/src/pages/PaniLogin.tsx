@@ -812,4 +812,18 @@ export default function PaniLogin() {
       {/* Lado DIREITO - Cor MARROM do Footer (bg-secondary) */}
       <div className="hidden md:flex md:w-1/2 bg-secondary items-center justify-center p-8">
         <div className="text-center max-w-sm">
-          <div className="w-56 h-56 mx-auto rounded-full overflow-hidden border-4 border-secondary-foreground/30 shadow-2xl mb-6 bg-wh
+          <div className="w-56 h-56 mx-auto rounded-full overflow-hidden border-4 border-secondary-foreground/30 shadow-2xl mb-6 bg-white">
+            <img src="/images/foto17.png" alt="Pani Di Grano" className="w-full h-full object-cover" />
+          </div>
+          <h2 className="text-secondary-foreground font-bold text-2xl mb-4">Pani Di Grano</h2>
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-secondary-foreground/20">
+            <p className="text-secondary-foreground/80 text-sm italic leading-relaxed mb-2">
+              "Bolos e Pães Artesanais feitos com amor e ingredientes de qualidade."
+            </p>
+            <p className="text-secondary-foreground/40 text-xs">— Pani Di Grano</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
