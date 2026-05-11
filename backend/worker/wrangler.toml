@@ -1,44 +1,39 @@
 name = "padariapanidigrano"
-main = "index.js"
+main = "src/index.ts"
 compatibility_date = "2025-01-20"
 
 [vars]
-RESEND_API_KEY = "re_AmqHoEV1_PhyMRGbiZF8hCpSK5ZEEsG4G"
 ADMIN_EMAIL = "panibolosepaes@gmail.com"
-JWT_SECRET = "seu-segredo-aqui"
 
-[env.dev]
-vars = { RESEND_API_KEY = "re_AmqHoEV1_PhyMRGbiZF8hCpSK5ZEEsG4G", ADMIN_EMAIL = "panibolosepaes@gmail.com", JWT_SECRET = "dev-secret-key" }
-
-[env.production]
-vars = { RESEND_API_KEY = "re_AmqHoEV1_PhyMRGbiZF8hCpSK5ZEEsG4G", ADMIN_EMAIL = "panibolosepaes@gmail.com", JWT_SECRET = "prod-secret-key" }
+# =========================
+# D1 DATABASE
+# =========================
 
 [[d1_databases]]
 binding = "DB"
 database_name = "padariapanidigrano_db"
-database_id = "03ff9f8a-3a3b-408b-abe8-9088f4082d4c"
+database_id = "71f46eb9425e46e8bce2cddf478d3850"
 
-# backend/worker/wrangler.toml
-name = "padariapanidigrano"
-main = "src/index.ts"
-compatibility_date = "2024-01-01"
+# =========================
+# KV AUTH
+# =========================
 
-# D1 Database
-[[d1_databases]]
-binding = "DB"
-database_name = "padariapanidigrano_db"
-database_id = "SEU_DATABASE_ID_AQUI"  # Você precisa pegar o ID
-
-# KV Namespaces
 [[kv_namespaces]]
 binding = "KV_AUTH"
-id = "SEU_KV_AUTH_ID"
+id = "e34aed3246dc49ec962e0f40682f28ee"
+
+# =========================
+# KV CACHE
+# =========================
 
 [[kv_namespaces]]
 binding = "KV_CACHE"
-id = "SEU_KV_CACHE_ID"
+id = "6003ead0b2d94c0dbf29e3c6edbd1244"
 
-# R2 Buckets
+# =========================
+# R2 FILES
+# =========================
+
 [[r2_buckets]]
 binding = "R2_FILES"
 bucket_name = "padariapanidigrano-midias"
