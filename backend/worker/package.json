@@ -1,0 +1,36 @@
+{
+  "name": "panidigrano-worker",
+  "version": "1.0.0",
+  "description": "Worker Cloudflare da Pani Di Grano - Bolos e Pães Artesanais",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --remote",
+    "dev:local": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "deploy:prod": "wrangler deploy --env production",
+    "logs": "wrangler tail",
+    "logs:prod": "wrangler tail --env production",
+    "cf-typegen": "wrangler types"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250214.0",
+    "@types/qrcode": "^1.5.6",
+    "@types/speakeasy": "^2.0.10",
+    "wrangler": "^4.80.0"
+  },
+  "dependencies": {
+    "qrcode": "^1.5.4",
+    "speakeasy": "^2.0.0"
+  },
+  "keywords": [
+    "cloudflare",
+    "worker",
+    "panidigrano",
+    "padaria",
+    "artesanal",
+    "bolos",
+    "paes"
+  ],
+  "author": "Pani Di Grano",
+  "license": "MIT"
+}

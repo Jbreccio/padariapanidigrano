@@ -1,0 +1,19 @@
+name = "padariapanidigrano"
+main = "index.js"
+compatibility_date = "2025-01-20"
+
+[vars]
+RESEND_API_KEY = "re_AmqHoEV1_PhyMRGbiZF8hCpSK5ZEEsG4G"
+ADMIN_EMAIL = "panibolosepaes@gmail.com"
+JWT_SECRET = "seu-segredo-aqui"
+
+[env.dev]
+vars = { RESEND_API_KEY = "re_AmqHoEV1_PhyMRGbiZF8hCpSK5ZEEsG4G", ADMIN_EMAIL = "panibolosepaes@gmail.com", JWT_SECRET = "dev-secret-key" }
+
+[env.production]
+vars = { RESEND_API_KEY = "re_AmqHoEV1_PhyMRGbiZF8hCpSK5ZEEsG4G", ADMIN_EMAIL = "panibolosepaes@gmail.com", JWT_SECRET = "prod-secret-key" }
+
+[[d1_databases]]
+binding = "DB"
+database_name = "padariapanidigrano_db"
+database_id = "03ff9f8a-3a3b-408b-abe8-9088f4082d4c"

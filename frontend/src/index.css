@@ -1,0 +1,205 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lato:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Cores principais inspiradas no logo Pani Di Grano */
+    --background: 35 30% 97%;
+    --foreground: 25 35% 20%;
+
+    --card: 35 25% 95%;
+    --card-foreground: 25 35% 20%;
+
+    --popover: 35 30% 97%;
+    --popover-foreground: 25 35% 20%;
+
+    /* Rosa suave do logo */
+    --primary: 350 35% 75%;
+    --primary-foreground: 25 35% 15%;
+
+    /* Marrom chocolate */
+    --secondary: 25 35% 35%;
+    --secondary-foreground: 35 30% 97%;
+
+    /* Bege dourado */
+    --muted: 35 25% 90%;
+    --muted-foreground: 25 20% 45%;
+
+    /* Accent - dourado trigo */
+    --accent: 40 50% 70%;
+    --accent-foreground: 25 35% 15%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 25 20% 85%;
+    --input: 25 20% 85%;
+    --ring: 350 35% 65%;
+
+    --radius: 0.75rem;
+
+    /* Sidebar */
+    --sidebar-background: 35 25% 95%;
+    --sidebar-foreground: 25 35% 25%;
+    --sidebar-primary: 350 35% 70%;
+    --sidebar-primary-foreground: 25 35% 15%;
+    --sidebar-accent: 35 20% 88%;
+    --sidebar-accent-foreground: 25 35% 20%;
+    --sidebar-border: 25 20% 85%;
+    --sidebar-ring: 350 35% 65%;
+
+    /* Custom colors */
+    --cream: 40 35% 95%;
+    --chocolate: 25 40% 28%;
+    --rose-light: 350 45% 85%;
+    --rose-dark: 350 35% 55%;
+    --wheat: 40 55% 75%;
+    --wheat-dark: 40 45% 55%;
+  }
+
+  .dark {
+    --background: 25 30% 10%;
+    --foreground: 35 25% 95%;
+
+    --card: 25 30% 12%;
+    --card-foreground: 35 25% 95%;
+
+    --popover: 25 30% 10%;
+    --popover-foreground: 35 25% 95%;
+
+    --primary: 350 40% 70%;
+    --primary-foreground: 25 35% 10%;
+
+    --secondary: 35 30% 25%;
+    --secondary-foreground: 35 25% 95%;
+
+    --muted: 25 25% 18%;
+    --muted-foreground: 35 20% 65%;
+
+    --accent: 40 45% 45%;
+    --accent-foreground: 35 25% 95%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 25 25% 20%;
+    --input: 25 25% 20%;
+    --ring: 350 40% 55%;
+
+    --sidebar-background: 25 30% 12%;
+    --sidebar-foreground: 35 25% 90%;
+    --sidebar-primary: 350 40% 65%;
+    --sidebar-primary-foreground: 25 35% 10%;
+    --sidebar-accent: 25 25% 18%;
+    --sidebar-accent-foreground: 35 25% 90%;
+    --sidebar-border: 25 25% 20%;
+    --sidebar-ring: 350 40% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Lato', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+  }
+}
+
+@layer components {
+  .text-gradient {
+    @apply bg-gradient-to-r from-secondary via-rose-dark to-secondary bg-clip-text text-transparent;
+  }
+
+  .bg-hero-gradient {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--cream)) 0%,
+      hsl(var(--rose-light)) 50%,
+      hsl(var(--cream)) 100%
+    );
+  }
+
+  .bg-section-gradient {
+    background: linear-gradient(
+      180deg,
+      hsl(var(--background)) 0%,
+      hsl(var(--muted)) 100%
+    );
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+  }
+
+  .btn-primary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/90 
+           font-medium px-6 py-3 rounded-lg transition-all duration-300
+           hover:shadow-lg active:scale-95;
+  }
+
+  .btn-outline {
+    @apply border-2 border-secondary text-secondary hover:bg-secondary 
+           hover:text-secondary-foreground font-medium px-6 py-3 rounded-lg 
+           transition-all duration-300;
+  }
+
+  .input-styled {
+    @apply border-2 border-border bg-background focus:border-primary 
+           focus:ring-2 focus:ring-primary/20 rounded-lg px-4 py-3
+           transition-all duration-200;
+  }
+
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold text-secondary text-center mb-4;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .section-subtitle {
+    @apply text-muted-foreground text-center max-w-2xl mx-auto mb-12;
+  }
+}
+
+@layer utilities {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out forwards;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from { 
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
