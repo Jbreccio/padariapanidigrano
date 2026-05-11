@@ -101,7 +101,8 @@ function secureResponse(response, request) {
 const PUBLIC_ROUTES = [
   '/api/auth/login', '/api/auth/register', '/api/auth/esqueci-senha',
   '/api/auth/confirmar-reset-senha', '/api/auth/solicitar-reset-2fa',
-  '/api/auth/confirmar-reset-2fa', '/api/contato/enviar',
+  '/api/auth/confirmar-reset-2fa', '/api/auth/health',  // <-- ADICIONADO HEALTH
+  '/api/contato/enviar',
   '/api/health', '/', '/api'
 ];
 
@@ -142,6 +143,16 @@ export default {
     // Valida tamanho do payload
     const payloadError = validatePayloadSize(request);
     if (payloadError) return secureResponse(payloadError, request);
+
+    // 🔥 HEALTH CHECK - ADICIONADO NO INÍCIO
+    if (pathname === '/api/auth/health' || pathname === '/api/health') {
+      return secureResponse(jsonResponse({ 
+        success: true, 
+        status: 'healthy', 
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'development'
+      }), request);
+    }
 
     // Rate limit para rotas de autenticação
     const isAuthPath = pathname.includes('/auth/login') ||
@@ -340,12 +351,8 @@ export default {
       }
 
       // ============================================
-      // 🏥 HEALTH CHECK
+      // 🏥 HEALTH CHECK JÁ FOI TRATADO NO INÍCIO
       // ============================================
-
-      if (pathname === '/api/health') {
-        return secureResponse(jsonResponse({ success: true, status: 'healthy', timestamp: new Date().toISOString() }), request);
-      }
 
       if (pathname === '/' || pathname === '/api') {
         return secureResponse(jsonResponse({ 
