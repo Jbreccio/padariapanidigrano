@@ -19,6 +19,7 @@ import FAQ from "./pages/FAQ";
 import PoliticasPrivacidade from "./pages/PoliticasPrivacidade";
 import PainelAdmin from "./pages/PainelAdmin";
 import PaniLogin from "./pages/PaniLogin";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
+      <SpeedInsights />
       <BrowserRouter>
         <AuthProvider>
           <CartProvider>

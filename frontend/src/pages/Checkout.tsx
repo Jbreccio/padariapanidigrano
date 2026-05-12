@@ -1,25 +1,23 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../integrations/supabase/client";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Cart from "../components/Cart";
 import { useCart } from "../contexts/CartContext";
+import { useAuth } from "../contexts/AuthContext";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Textarea } from "../components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "../components/ui/radio-group";
 import { useToast } from "../hooks/use-toast";
-import { ShoppingBag, MapPin, CreditCard, Truck, Store, User, Trash2, Minus, Plus } from "lucide-react";
-import type { User as SupabaseUser, Session } from "@supabase/supabase-js";
+import { ShoppingBag, CreditCard, Truck, Store, User, Trash2, Minus, Plus } from "lucide-react";
 
 const Checkout = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { items, isOpen, setIsOpen, updateQuantity, removeItem, clearCart, itemCount, total } = useCart();
-  const [user, setUser] = useState<SupabaseUser | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
 
   const [name, setName] = useState("");
@@ -34,29 +32,13 @@ const Checkout = () => {
   const formatPrice = (price: number) =>
     new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(price);
 
+  // Preencher dados do usuário se estiver logado
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        if (session?.user) {
-          setTimeout(() => {
-            setName(session.user.user_metadata?.full_name || "");
-            setPhone(session.user.user_metadata?.phone || "");
-          }, 0);
-        }
-      }
-    );
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        setName(session.user.user_metadata?.full_name || "");
-        setPhone(session.user.user_metadata?.phone || "");
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, []);
+    if (user) {
+      setName(user.nome || "");
+      // Telefone não está disponível no user, manter vazio ou preencher depois
+    }
+  }, [user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,6 +53,7 @@ const Checkout = () => {
     }
     setIsLoading(true);
     try {
+      // Aqui você pode enviar o pedido para a API
       toast({ title: "Pedido enviado!", description: `Total: ${formatPrice(total)}. Em breve entraremos em contato.` });
       clearCart();
       navigate("/");
@@ -174,11 +157,24 @@ const Checkout = () => {
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Nome completo</Label>
-                    <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Seu nome" required />
+                    <Input 
+                      id="name" 
+                      value={name} 
+                      onChange={(e) => setName(e.target.value)} 
+                      placeholder="Seu nome" 
+                      required 
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="phone">Telefone / WhatsApp</Label>
-                    <Input id="phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="(11) 99999-9999" required />
+                    <Input 
+                      id="phone" 
+                      type="tel" 
+                      value={phone} 
+                      onChange={(e) => setPhone(e.target.value)} 
+                      placeholder="(11) 99999-9999" 
+                      required 
+                    />
                   </div>
                 </div>
               </div>
