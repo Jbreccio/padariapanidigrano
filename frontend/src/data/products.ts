@@ -1,12 +1,3 @@
-import { Product } from "@/components/ProductCard";
-
-export interface Category {
-  id: string;
-  name: string;
-  description: string;
-  icon: string;
-}
-
 import { Product } from "../components/ProductCard";
 
 export interface Category {
