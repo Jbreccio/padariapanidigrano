@@ -2,8 +2,23 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 
-export default defineConfig(({ mode }) => ({
-  base: "./", // 👈 CORRETO AQUI (essencial pro Capacitor)
+export default defineConfig({
+  /**
+   * 🔥 IMPORTANTE:
+   * - "/" = Vercel + produção web correta
+   * - "./" = Capacitor (mobile local)
+   *
+   * 👉 SOLUÇÃO PROFISSIONAL: usar "/" e deixar Capacitor resolver via config dele
+   */
+  base: "/",
+
+  plugins: [react()],
+
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
 
   server: {
     host: "::",
@@ -13,17 +28,18 @@ export default defineConfig(({ mode }) => ({
     },
   },
 
-  plugins: [
-    react()
-  ],
-
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
-  },
-
   build: {
     outDir: "dist",
-  }
-}));
+
+    // 🔥 evita bugs de chunk grande no Vercel
+    chunkSizeWarningLimit: 1000,
+
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ["react", "react-dom"],
+        },
+      },
+    },
+  },
+});
