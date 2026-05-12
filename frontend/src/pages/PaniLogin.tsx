@@ -88,7 +88,7 @@ const shouldShowLogo = (step: Step): boolean => {
   return !['pin', '2fa-setup', '2fa-verify', 'reset-2fa', 'reset-2fa-backup', 'reset-2fa-email'].includes(step);
 };
 
-export const getAuthToken = () => localStorage.getItem('fiel_token');
+export const getAuthToken = () => localStorage.getItem('user_token');
 
 export default function PaniLogin() {
   const navigate = useNavigate();
@@ -212,7 +212,7 @@ export default function PaniLogin() {
     let isMounted = true;
     const verificarToken = async () => {
       if (checkedOnceRef.current) return;
-      const token = localStorage.getItem('fiel_token');
+      const token = localStorage.getItem('user_token');
       if (!token) {
         if (isMounted) { setStep('idle'); setAuthChecked(true); checkedOnceRef.current = true; }
         return;
@@ -226,10 +226,10 @@ export default function PaniLogin() {
         if (isMounted) {
           if (data.success && data.user?.role === 'admin') navigate('/paineladmin', { replace: true });
           else if (data.success) navigate('/', { replace: true });
-          else { localStorage.removeItem('fiel_token'); localStorage.removeItem('fiel_user'); setStep('idle'); }
+          else { localStorage.removeItem('user_token'); localStorage.removeItem('user'); setStep('idle'); }
         }
       } catch (err: any) {
-        if (isMounted) { localStorage.removeItem('fiel_token'); localStorage.removeItem('fiel_user'); setStep('idle'); }
+        if (isMounted) { localStorage.removeItem('user_token'); localStorage.removeItem('user'); setStep('idle'); }
       } finally {
         if (isMounted) { setAuthChecked(true); checkedOnceRef.current = true; }
       }
@@ -302,8 +302,8 @@ export default function PaniLogin() {
     try {
       const data = await api.verify2FA(userId, codigo2FA);
       if (!data.success) { setError(data.error); return; }
-      localStorage.setItem('fiel_token', data.token);
-      localStorage.setItem('fiel_user', JSON.stringify(data.user));
+      localStorage.setItem('user_token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
       if (data.user?.role === 'admin') navigate('/paineladmin', { replace: true });
       else navigate('/', { replace: true });
     } catch (err: any) {
@@ -476,7 +476,7 @@ export default function PaniLogin() {
     <div className="min-h-screen flex flex-col md:flex-row overflow-hidden bg-background">
       <Popup />
 
-      {/* Lado ESQUERDO - Modal Central com cores do Auth.tsx (bg-card, border-border) */}
+            {/* Lado ESQUERDO - Modal Central com cores do Auth.tsx (bg-card, border-border) */}
       <div className="w-full md:w-1/2 flex items-center justify-center p-4 min-h-screen">
         <div className="w-full max-w-sm">
           <div className="bg-card rounded-2xl border border-border shadow-lg overflow-hidden">
@@ -484,8 +484,8 @@ export default function PaniLogin() {
             {mostrarLogo && (
               <div className="pt-8 px-5 text-center bg-gradient-to-b from-muted/30 to-card">
                 <div className="flex justify-center mb-3">
-                  {/* CÍRCULO DA LOGO - Cor do botão Entrar (bg-primary) */}
-                  <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-primary/30 shadow-lg bg-primary p-2">
+                  {/* CÍRCULO DA LOGO - mesma cor do círculo direito (bg-white) */}
+                  <div className="w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-primary/30 shadow-2xl mb-6 bg-primary">
                     <img src="/images/logo.png" alt="Pani Di Grano" className="w-full h-full object-contain" />
                   </div>
                 </div>
@@ -548,8 +548,8 @@ export default function PaniLogin() {
                   {sucesso && <SucessoBox msg={sucesso} />}
                   <form onSubmit={handleVerifyPin} className="space-y-3">
                     <div className="text-center py-2">
-                      {/* CÍRCULO DO EMAIL - Cor do botão Entrar (bg-primary) */}
-                      <div className="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-primary/30 flex items-center justify-center overflow-hidden bg-primary">
+                      {/* CÍRCULO DO EMAIL - mesma cor do círculo direito (bg-white) */}
+                      <div className="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-secondary-foreground/30 flex items-center justify-center overflow-hidden bg-white">
                         <img src="/images/email.png" alt="Email" className="w-full h-full object-cover" onError={(e) => { e.currentTarget.src = 'https://cdn-icons-png.flaticon.com/512/732/732200.png'; }} />
                       </div>
                       <p className="text-muted-foreground text-xs mb-1">PIN de 6 dígitos enviado para:</p>
@@ -611,8 +611,8 @@ export default function PaniLogin() {
                         <div className="bg-white p-3 rounded-lg inline-block border border-border">
                           <img src={qrCodeUrl} alt="QR" className="w-40 h-40" />
                         </div>
-                        {/* CÍRCULO DO GOOGLE AUTHENTICATOR - Cor do botão Entrar (bg-primary) */}
-                        <div className="w-16 h-16 rounded-full border-2 border-primary/30 flex items-center justify-center overflow-hidden bg-primary">
+                        {/* CÍRCULO DO GOOGLE AUTHENTICATOR - mesma cor do círculo direito (bg-white) */}
+                        <div className="w-16 h-16 rounded-full border-2 border-secondary-foreground/30 flex items-center justify-center overflow-hidden bg-white">
                           <img src="/images/google-authenticator.png" alt="GA" className="w-full h-full object-cover rounded-full" />
                         </div>
                       </div>
@@ -642,8 +642,8 @@ export default function PaniLogin() {
                   {error && <ErrorBox msg={error} />}
                   <form onSubmit={handleVerify2FA} className="space-y-4">
                     <div className="text-center">
-                      {/* CÍRCULO DO GOOGLE AUTHENTICATOR (verify) - Cor do botão Entrar (bg-primary) */}
-                      <div className="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-primary/30 flex items-center justify-center overflow-hidden bg-primary">
+                      {/* CÍRCULO DO GOOGLE AUTHENTICATOR (verify) - mesma cor do círculo direito (bg-white) */}
+                      <div className="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-secondary-foreground/30 flex items-center justify-center overflow-hidden bg-white">
                         <img src="/images/google-authenticator.png" alt="GA" className="w-full h-full object-cover rounded-full" />
                       </div>
                       <p className="text-foreground font-semibold text-sm">Google Authenticator</p>
@@ -686,9 +686,9 @@ export default function PaniLogin() {
                   {error && <ErrorBox msg={error} />}
                   <form onSubmit={handleReset2FABackup} className="space-y-3">
                     <div className="text-center mb-2">
-                      {/* CÍRCULO DO KEY - Cor do botão Entrar (bg-primary) */}
-                      <div className="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-primary/30 flex items-center justify-center bg-primary">
-                        <Key size={32} className="text-white" />
+                      {/* CÍRCULO DO KEY - mesma cor do círculo direito (bg-white) */}
+                      <div className="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-secondary-foreground/30 flex items-center justify-center bg-white">
+                        <Key size={32} className="text-muted-foreground" />
                       </div>
                       <p className="text-muted-foreground text-xs">Digite o código de backup salvo ao configurar o 2FA</p>
                     </div>
@@ -715,8 +715,8 @@ export default function PaniLogin() {
                   {!resetMethod ? (
                     <form onSubmit={handleSolicitarReset2FAEmail} className="space-y-3">
                       <div className="text-center mb-2">
-                        {/* CÍRCULO DO EMAIL RESET - Cor do botão Entrar (bg-primary) */}
-                        <div className="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-primary/30 flex items-center justify-center overflow-hidden bg-primary">
+                        {/* CÍRCULO DO EMAIL RESET - mesma cor do círculo direito (bg-white) */}
+                        <div className="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-secondary-foreground/30 flex items-center justify-center overflow-hidden bg-white">
                           <img src="/images/email.png" alt="Email" className="w-full h-full object-cover" />
                         </div>
                         <p className="text-muted-foreground text-xs">Enviaremos um link para remover o 2FA. Válido por 10 minutos.</p>
@@ -755,8 +755,8 @@ export default function PaniLogin() {
                   {!sucesso && (
                     <form onSubmit={handleEsqueciSenha} className="space-y-3">
                       <div className="text-center mb-2">
-                        {/* CÍRCULO DO EMAIL ESQUECI SENHA - Cor do botão Entrar (bg-primary) */}
-                        <div className="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-primary/30 flex items-center justify-center overflow-hidden bg-primary">
+                        {/* CÍRCULO DO EMAIL ESQUECI SENHA - mesma cor do círculo direito (bg-white) */}
+                        <div className="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-secondary-foreground/30 flex items-center justify-center overflow-hidden bg-white">
                           <img src="/images/email.png" alt="Email" className="w-full h-full object-cover" />
                         </div>
                         <p className="text-muted-foreground text-xs">Digite seu e-mail para receber o link de redefinição.</p>
