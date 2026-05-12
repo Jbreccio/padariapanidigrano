@@ -484,7 +484,8 @@ export default function PaniLogin() {
             {mostrarLogo && (
               <div className="pt-8 px-5 text-center bg-gradient-to-b from-muted/30 to-card">
                 <div className="flex justify-center mb-3">
-                  <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-primary/30 shadow-lg bg-white p-2">
+                  {/* CÍRCULO DA LOGO - Cor do botão Entrar (bg-primary) */}
+                  <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-primary/30 shadow-lg bg-primary p-2">
                     <img src="/images/logo.png" alt="Pani Di Grano" className="w-full h-full object-contain" />
                   </div>
                 </div>
@@ -547,7 +548,8 @@ export default function PaniLogin() {
                   {sucesso && <SucessoBox msg={sucesso} />}
                   <form onSubmit={handleVerifyPin} className="space-y-3">
                     <div className="text-center py-2">
-                      <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-muted border-2 border-border flex items-center justify-center overflow-hidden">
+                      {/* CÍRCULO DO EMAIL - Cor do botão Entrar (bg-primary) */}
+                      <div className="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-primary/30 flex items-center justify-center overflow-hidden bg-primary">
                         <img src="/images/email.png" alt="Email" className="w-full h-full object-cover" onError={(e) => { e.currentTarget.src = 'https://cdn-icons-png.flaticon.com/512/732/732200.png'; }} />
                       </div>
                       <p className="text-muted-foreground text-xs mb-1">PIN de 6 dígitos enviado para:</p>
@@ -609,7 +611,8 @@ export default function PaniLogin() {
                         <div className="bg-white p-3 rounded-lg inline-block border border-border">
                           <img src={qrCodeUrl} alt="QR" className="w-40 h-40" />
                         </div>
-                        <div className="w-16 h-16 rounded-full bg-muted border-2 border-border flex items-center justify-center overflow-hidden">
+                        {/* CÍRCULO DO GOOGLE AUTHENTICATOR - Cor do botão Entrar (bg-primary) */}
+                        <div className="w-16 h-16 rounded-full border-2 border-primary/30 flex items-center justify-center overflow-hidden bg-primary">
                           <img src="/images/google-authenticator.png" alt="GA" className="w-full h-full object-cover rounded-full" />
                         </div>
                       </div>
@@ -639,7 +642,8 @@ export default function PaniLogin() {
                   {error && <ErrorBox msg={error} />}
                   <form onSubmit={handleVerify2FA} className="space-y-4">
                     <div className="text-center">
-                      <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-muted border-2 border-border flex items-center justify-center overflow-hidden">
+                      {/* CÍRCULO DO GOOGLE AUTHENTICATOR (verify) - Cor do botão Entrar (bg-primary) */}
+                      <div className="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-primary/30 flex items-center justify-center overflow-hidden bg-primary">
                         <img src="/images/google-authenticator.png" alt="GA" className="w-full h-full object-cover rounded-full" />
                       </div>
                       <p className="text-foreground font-semibold text-sm">Google Authenticator</p>
@@ -682,8 +686,9 @@ export default function PaniLogin() {
                   {error && <ErrorBox msg={error} />}
                   <form onSubmit={handleReset2FABackup} className="space-y-3">
                     <div className="text-center mb-2">
-                      <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-muted border-2 border-border flex items-center justify-center">
-                        <Key size={32} className="text-muted-foreground" />
+                      {/* CÍRCULO DO KEY - Cor do botão Entrar (bg-primary) */}
+                      <div className="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-primary/30 flex items-center justify-center bg-primary">
+                        <Key size={32} className="text-white" />
                       </div>
                       <p className="text-muted-foreground text-xs">Digite o código de backup salvo ao configurar o 2FA</p>
                     </div>
@@ -710,7 +715,8 @@ export default function PaniLogin() {
                   {!resetMethod ? (
                     <form onSubmit={handleSolicitarReset2FAEmail} className="space-y-3">
                       <div className="text-center mb-2">
-                        <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-muted border-2 border-border flex items-center justify-center overflow-hidden">
+                        {/* CÍRCULO DO EMAIL RESET - Cor do botão Entrar (bg-primary) */}
+                        <div className="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-primary/30 flex items-center justify-center overflow-hidden bg-primary">
                           <img src="/images/email.png" alt="Email" className="w-full h-full object-cover" />
                         </div>
                         <p className="text-muted-foreground text-xs">Enviaremos um link para remover o 2FA. Válido por 10 minutos.</p>
@@ -749,7 +755,8 @@ export default function PaniLogin() {
                   {!sucesso && (
                     <form onSubmit={handleEsqueciSenha} className="space-y-3">
                       <div className="text-center mb-2">
-                        <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-muted border-2 border-border flex items-center justify-center overflow-hidden">
+                        {/* CÍRCULO DO EMAIL ESQUECI SENHA - Cor do botão Entrar (bg-primary) */}
+                        <div className="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-primary/30 flex items-center justify-center overflow-hidden bg-primary">
                           <img src="/images/email.png" alt="Email" className="w-full h-full object-cover" />
                         </div>
                         <p className="text-muted-foreground text-xs">Digite seu e-mail para receber o link de redefinição.</p>
@@ -812,7 +819,8 @@ export default function PaniLogin() {
       {/* Lado DIREITO - Cor MARROM do Footer (bg-secondary) */}
       <div className="hidden md:flex md:w-1/2 bg-secondary items-center justify-center p-8">
         <div className="text-center max-w-sm">
-          <div className="w-56 h-56 mx-auto rounded-full overflow-hidden border-4 border-secondary-foreground/30 shadow-2xl mb-6 bg-white">
+          {/* CÍRCULO DA FOTO DO LADO DIREITO - Cor do botão Entrar (bg-primary) */}
+          <div className="w-56 h-56 mx-auto rounded-full overflow-hidden border-4 border-primary/30 shadow-2xl mb-6 bg-primary">
             <img src="/images/foto17.png" alt="Pani Di Grano" className="w-full h-full object-cover" />
           </div>
           <h2 className="text-secondary-foreground font-bold text-2xl mb-4">Pani Di Grano</h2>

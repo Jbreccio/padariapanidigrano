@@ -1,35 +1,36 @@
 {
   "compilerOptions": {
-    "allowImportingTsExtensions": true,
-    "isolatedModules": true,
-    "jsx": "react-jsx",
-    "lib": [
-      "ES2020",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+
     "module": "ESNext",
-    "moduleDetection": "force",
     "moduleResolution": "bundler",
-    "noEmit": true,
-    "noFallthroughCasesInSwitch": false,
+    "moduleDetection": "force",
+
+    "jsx": "react-jsx",
+
+    "strict": false,
     "noImplicitAny": false,
+
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ]
-    },
+    "noFallthroughCasesInSwitch": false,
+
+    "isolatedModules": true,
     "skipLibCheck": true,
-    "strict": false,
-    "target": "ES2020",
-    "types": [
-      "vitest/globals"
-    ],
-    "useDefineForClassFields": true
+
+    "resolveJsonModule": true,
+
+    "noEmit": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+
+    "types": ["vitest/globals"]
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }
