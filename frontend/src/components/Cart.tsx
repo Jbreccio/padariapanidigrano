@@ -62,13 +62,17 @@ const Cart = ({
             <p className="text-muted-foreground mb-6">
               Adicione produtos deliciosos ao seu carrinho!
             </p>
-            <Button onClick={onClose} className="btn-primary">
+            {/* BOTÃO AJUSTADO COM A BORDA DUPLA */}
+            <Button 
+              onClick={onClose} 
+              className="btn-primary ring-2 ring-offset-2 ring-rose-300/60 transition-all px-8"
+            >
               Ver Cardápio
             </Button>
           </div>
         ) : (
           <>
-            {/* Cart Items */}
+            {/* Cart Items - Mantido original */}
             <div className="flex-1 overflow-y-auto py-4 space-y-4">
               {items.map((item) => (
                 <div 
@@ -143,7 +147,7 @@ const Cart = ({
               ))}
             </div>
 
-            {/* Footer */}
+            {/* Footer - Mantido original */}
             <div className="border-t border-border pt-4 space-y-4">
               <div className="flex items-center justify-between text-lg">
                 <span className="font-medium">Total</span>

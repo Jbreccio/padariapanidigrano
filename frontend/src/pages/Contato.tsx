@@ -25,16 +25,50 @@ const Contato = () => {
     }
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    toast({
-      title: "Mensagem enviada!",
-      description: "Entraremos em contato em breve.",
-    });
-    setIsSubmitting(false);
-    (e.target as HTMLFormElement).reset();
+
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      nome: formData.get("name"),
+      email: formData.get("email"),
+      telefone: formData.get("phone") || "",
+      mensagem: formData.get("message"),
+    };
+
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || "https://seu-worker.workers.dev";
+      const response = await fetch(`${API_URL}/contato/enviar`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        toast({
+          title: "✅ Mensagem enviada!",
+          description: result.message || "Entraremos em contato em breve.",
+          className: "bg-green-50 border-green-200",
+        });
+        (e.target as HTMLFormElement).reset();
+      } else {
+        throw new Error(result.error || "Erro ao enviar mensagem");
+      }
+    } catch (error) {
+      console.error("Erro ao enviar:", error);
+      toast({
+        title: "❌ Erro ao enviar",
+        description: "Não foi possível enviar sua mensagem. Tente novamente mais tarde.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -122,7 +156,7 @@ const Contato = () => {
                     <div className="flex-1">
                       <h3 className="font-semibold text-foreground">Endereço</h3>
                       <p className="text-muted-foreground mt-1">
-                        R. Cel. Seabra, 1044 - Vila Marina<br />
+                        Rua Cel. Seabra, 1044 - Vila Marina<br />
                         Santo André - SP, 09176-000
                       </p>
                     </div>
@@ -171,23 +205,43 @@ const Contato = () => {
               <form onSubmit={handleSubmit} className="space-y-3">
                 <div className="space-y-1">
                   <Label htmlFor="name" className="text-sm">Nome</Label>
-                  <Input id="name" placeholder="Seu nome" className="h-9" required />
+                  <Input 
+                    id="name" 
+                    name="name"
+                    placeholder="Seu nome" 
+                    className="h-9" 
+                    required 
+                  />
                 </div>
 
                 <div className="space-y-1">
                   <Label htmlFor="email" className="text-sm">Email</Label>
-                  <Input id="email" type="email" placeholder="seu@email.com" className="h-9" required />
+                  <Input 
+                    id="email" 
+                    name="email"
+                    type="email" 
+                    placeholder="seu@email.com" 
+                    className="h-9" 
+                    required 
+                  />
                 </div>
 
                 <div className="space-y-1">
                   <Label htmlFor="phone" className="text-sm">Telefone</Label>
-                  <Input id="phone" type="tel" placeholder="(11) 99999-9999" className="h-9" />
+                  <Input 
+                    id="phone" 
+                    name="phone"
+                    type="tel" 
+                    placeholder="(11) 99999-9999" 
+                    className="h-9" 
+                  />
                 </div>
 
                 <div className="space-y-1">
                   <Label htmlFor="message" className="text-sm">Mensagem</Label>
                   <Textarea 
                     id="message" 
+                    name="message"
                     placeholder="Escreva sua mensagem aqui..."
                     rows={4}
                     className="min-h-[100px]"
@@ -195,7 +249,11 @@ const Contato = () => {
                   />
                 </div>
 
-                <Button type="submit" className="w-full btn-primary mt-2" disabled={isSubmitting}>
+                <Button 
+                  type="submit" 
+                  className="w-full btn-primary mt-2" 
+                  disabled={isSubmitting}
+                >
                   {isSubmitting ? "Enviando..." : "Enviar Mensagem"}
                 </Button>
               </form>

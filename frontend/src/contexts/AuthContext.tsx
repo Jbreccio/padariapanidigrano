@@ -1,159 +1,81 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+// src/contexts/AuthContext.tsx
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-// Definição dos tipos
+// ============================================
+// CHAVES DO LOCALSTORAGE — padrão do projeto
+// ============================================
+export const TOKEN_KEY = 'pani_token';
+export const USER_KEY  = 'pani_user';
+
 interface User {
   id: string;
   nome: string;
   email: string;
-  role: 'user' | 'admin';
-  twofa_enabled?: boolean;
+  telefone?: string;
+  role?: string;
+  avatar?: string;
+  corFundo?: string;
+  planoFundo?: string;
 }
 
 interface AuthContextType {
   user: User | null;
+  token: string | null;
   isLoading: boolean;
-  isAdmin: boolean;
-  login: (email: string, password: string) => Promise<{ success: boolean; requiresTwoFactor?: boolean; tempToken?: string; message?: string }>;
-  register: (nome: string, email: string, password: string, phone?: string) => Promise<{ success: boolean; message?: string }>;
-  verify2fa: (code: string, tempToken: string) => Promise<boolean>;
-  logout: () => Promise<void>;
-  forgotPassword: (email: string) => Promise<{ success: boolean; message: string }>;
+  login: (user: User, token: string) => void;
+  logout: () => void;
+  updateUser: (data: Partial<User>) => void;
 }
-
-// API base URL
-const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
-
-// Funções da API
-const api = {
-  async login(email: string, password: string) {
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({ email, password })
-    });
-    return response.json();
-  },
-
-  async register(nome: string, email: string, password: string, phone?: string) {
-    const response = await fetch(`${API_BASE_URL}/auth/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({ nome, email, password, phone })
-    });
-    return response.json();
-  },
-
-  async verify2fa(code: string, tempToken: string) {
-    const response = await fetch(`${API_BASE_URL}/auth/verify-2fa`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({ code, tempToken })
-    });
-    return response.json();
-  },
-
-  async getUser() {
-    const response = await fetch(`${API_BASE_URL}/auth/verificar`, {
-      credentials: 'include'
-    });
-    if (!response.ok) return null;
-    const data = await response.json();
-    return data.success ? data.user : null;
-  },
-
-  async logout() {
-    await fetch(`${API_BASE_URL}/auth/logout`, { method: 'POST', credentials: 'include' });
-  },
-
-  async forgotPassword(email: string) {
-    const response = await fetch(`${API_BASE_URL}/auth/esqueci-senha`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({ email })
-    });
-    return response.json();
-  }
-};
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    loadUser();
+    const storedToken = localStorage.getItem(TOKEN_KEY);
+    const storedUser  = localStorage.getItem(USER_KEY);
+
+    if (storedToken && storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setToken(storedToken);
+        setUser(parsedUser);
+      } catch (e) {
+        console.error('Erro ao parsear usuário:', e);
+        localStorage.removeItem(TOKEN_KEY);
+        localStorage.removeItem(USER_KEY);
+      }
+    }
+    setIsLoading(false);
   }, []);
 
-  const loadUser = async () => {
-    try {
-      const userData = await api.getUser();
-      setUser(userData);
-    } catch (error) {
-      console.error('Erro ao carregar usuário:', error);
-    } finally {
-      setIsLoading(false);
-    }
+  const login = (userData: User, userToken: string) => {
+    setUser(userData);
+    setToken(userToken);
+    localStorage.setItem(TOKEN_KEY, userToken);
+    localStorage.setItem(USER_KEY, JSON.stringify(userData));
   };
 
-  const isAdmin = user?.role === 'admin';
-
-  const login = async (email: string, password: string) => {
-    try {
-      const response = await api.login(email, password);
-      if (response.success && response.user) {
-        setUser(response.user);
-        return { success: true };
-      }
-      if (response.requiresTwoFactor) {
-        return { success: false, requiresTwoFactor: true, tempToken: response.tempToken, message: response.message };
-      }
-      return { success: false, message: response.message || 'Erro ao fazer login' };
-    } catch (error) {
-      return { success: false, message: 'Erro de conexão com o servidor' };
-    }
-  };
-
-  const register = async (nome: string, email: string, password: string, phone?: string) => {
-    try {
-      const response = await api.register(nome, email, password, phone);
-      if (response.success) {
-        return { success: true };
-      }
-      return { success: false, message: response.message || 'Erro ao cadastrar' };
-    } catch (error) {
-      return { success: false, message: 'Erro de conexão com o servidor' };
-    }
-  };
-
-  const verify2fa = async (code: string, tempToken: string) => {
-    try {
-      const response = await api.verify2fa(code, tempToken);
-      if (response.success && response.user) {
-        setUser(response.user);
-        return true;
-      }
-      return false;
-    } catch (error) {
-      return false;
-    }
-  };
-
-  const logout = async () => {
-    await api.logout();
+  const logout = () => {
     setUser(null);
+    setToken(null);
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
   };
 
-  const forgotPassword = async (email: string) => {
-    return api.forgotPassword(email);
+  const updateUser = (data: Partial<User>) => {
+    if (user) {
+      const updatedUser = { ...user, ...data };
+      setUser(updatedUser);
+      localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, isAdmin, login, register, verify2fa, logout, forgotPassword }}>
+    <AuthContext.Provider value={{ user, token, isLoading, login, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );
@@ -161,8 +83,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
+  if (!context) throw new Error('useAuth must be used within AuthProvider');
   return context;
 };

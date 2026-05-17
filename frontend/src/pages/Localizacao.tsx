@@ -45,7 +45,7 @@ export default function Localizacao() {
           {/* Informações */}
           <div className="lg:col-span-1 space-y-4 md:space-y-6">
             {/* Endereço */}
-            <div className="bg-white rounded-lg shadow-sm p-4 md:p-6">
+            <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 transition-all duration-300 hover:shadow-xl hover:scale-105 hover:bg-gray-50">
               <div className="flex items-center gap-3 mb-4">
                 <MapPin className="text-primary" size={24} />
                 <h3 className="text-lg md:text-xl font-bold text-gray-900">Endereço</h3>
@@ -58,7 +58,7 @@ export default function Localizacao() {
             </div>
 
             {/* Telefone */}
-            <div className="bg-white rounded-lg shadow-sm p-4 md:p-6">
+            <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 transition-all duration-300 hover:shadow-xl hover:scale-105 hover:bg-gray-50">
               <div className="flex items-center gap-3 mb-4">
                 <Phone className="text-primary" size={24} />
                 <h3 className="text-lg md:text-xl font-bold text-gray-900">Telefone / WhatsApp</h3>
@@ -72,7 +72,7 @@ export default function Localizacao() {
             </div>
 
             {/* Email */}
-            <div className="bg-white rounded-lg shadow-sm p-4 md:p-6">
+            <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 transition-all duration-300 hover:shadow-xl hover:scale-105 hover:bg-gray-50">
               <div className="flex items-center gap-3 mb-4">
                 <Mail className="text-primary" size={24} />
                 <h3 className="text-lg md:text-xl font-bold text-gray-900">Email</h3>
@@ -83,7 +83,7 @@ export default function Localizacao() {
             </div>
 
             {/* Horário */}
-            <div className="bg-white rounded-lg shadow-sm p-4 md:p-6">
+            <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 transition-all duration-300 hover:shadow-xl hover:scale-105 hover:bg-gray-50">
               <div className="flex items-center gap-3 mb-4">
                 <Clock className="text-primary" size={34} />
                 <h3 className="text-lg md:text-xl font-bold text-gray-900">Horário de Funcionamento</h3>
@@ -149,13 +149,13 @@ export default function Localizacao() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
             
             {/* De Carro */}
-            <div className="bg-gray-50 rounded-lg p-4 md:p-6 border-l-4 border-primary">
+            <div className="bg-gray-50 rounded-lg p-4 md:p-6 border-l-4 border-primary transition-all duration-300 hover:shadow-xl hover:scale-105 hover:bg-white">
               <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-4 flex items-center gap-3">
                 <Car className="text-primary" size={24} />
                 De Carro
               </h3>
               <div className="space-y-3 text-gray-700 text-sm md:text-base">
-                <p><strong>Estacionamento:</strong> Estacionamento próprio disponível para clientes.</p>
+                <p><strong>Estacionamento:</strong> Estacionamento próprio disponível para fiels.</p>
                 <p><strong>Vias de Acesso:</strong></p>
                 <ul className="list-disc list-inside space-y-1 ml-2">
                   <li>Via Anchieta (sentido Santo André)</li>
@@ -169,7 +169,7 @@ export default function Localizacao() {
             </div>
             
             {/* De Ônibus (ABC) */}
-            <div className="bg-gray-50 rounded-lg p-4 md:p-6 border-l-4 border-primary">
+            <div className="bg-gray-50 rounded-lg p-4 md:p-6 border-l-4 border-primary transition-all duration-300 hover:shadow-xl hover:scale-105 hover:bg-white">
               <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-4 flex items-center gap-3">
                 <Bus className="text-primary" size={24} />
                 De Ônibus (ABC)
@@ -190,7 +190,7 @@ export default function Localizacao() {
             </div>
             
             {/* A Pé */}
-            <div className="bg-gray-50 rounded-lg p-4 md:p-6 border-l-4 border-primary">
+            <div className="bg-gray-50 rounded-lg p-4 md:p-6 border-l-4 border-primary transition-all duration-300 hover:shadow-xl hover:scale-105 hover:bg-white">
               <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-4 flex items-center gap-3">
                 <Footprints className="text-primary" size={24} />
                 A Pé

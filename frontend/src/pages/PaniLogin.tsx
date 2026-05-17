@@ -88,7 +88,8 @@ const shouldShowLogo = (step: Step): boolean => {
   return !['pin', '2fa-setup', '2fa-verify', 'reset-2fa', 'reset-2fa-backup', 'reset-2fa-email'].includes(step);
 };
 
-export const getAuthToken = () => localStorage.getItem('user_token');
+// 1. getAuthToken exportado com pani_token
+export const getAuthToken = () => localStorage.getItem('pani_token');
 
 export default function PaniLogin() {
   const navigate = useNavigate();
@@ -212,7 +213,8 @@ export default function PaniLogin() {
     let isMounted = true;
     const verificarToken = async () => {
       if (checkedOnceRef.current) return;
-      const token = localStorage.getItem('user_token');
+      // 2. verificarToken — token com pani_token
+      const token = localStorage.getItem('pani_token');
       if (!token) {
         if (isMounted) { setStep('idle'); setAuthChecked(true); checkedOnceRef.current = true; }
         return;
@@ -224,12 +226,24 @@ export default function PaniLogin() {
       try {
         const data = await api.verificarToken(token);
         if (isMounted) {
-          if (data.success && data.user?.role === 'admin') navigate('/paineladmin', { replace: true });
-          else if (data.success) navigate('/', { replace: true });
-          else { localStorage.removeItem('user_token'); localStorage.removeItem('user'); setStep('idle'); }
+          if (data.success) {
+
+  const role = data.user?.role;
+
+  console.log("ROLE:", role);
+
+  if (role === "admin") {
+    navigate("/paineladmin", { replace: true });
+  } else {
+    navigate("/painelcliente", { replace: true });
+  }
+
+  return;
+    }
+          else { localStorage.removeItem('pani_token'); localStorage.removeItem('pani_user'); setStep('idle'); }
         }
       } catch (err: any) {
-        if (isMounted) { localStorage.removeItem('user_token'); localStorage.removeItem('user'); setStep('idle'); }
+        if (isMounted) { localStorage.removeItem('pani_token'); localStorage.removeItem('pani_user'); setStep('idle'); }
       } finally {
         if (isMounted) { setAuthChecked(true); checkedOnceRef.current = true; }
       }
@@ -263,6 +277,16 @@ export default function PaniLogin() {
     try {
       const data = await api.verifyPin(userId, pin, celular || undefined);
       if (!data.success) { setError(data.error || 'PIN inválido'); return; }
+      
+      // 3. handleVerifyPin — adiciona bloco token direto + chave correta
+      if (data.token) {
+        localStorage.setItem('pani_token', data.token);
+        localStorage.setItem('pani_user', JSON.stringify(data.user));
+        if (data.user?.role === 'admin') navigate('/paineladmin', { replace: true });
+        else navigate('/painelcliente', { replace: true });
+        return;
+      }
+      
       const stepNext = data.step || data.nextStep;
       if (stepNext === '2fa-setup') {
         setQrCodeUrl(data.qrCodeUrl); setSecretKey(data.secretKey);
@@ -294,6 +318,7 @@ export default function PaniLogin() {
     setCodigo2FA(''); setShowBackupCodes(false); setStep('2fa-verify');
   }, [loading]);
 
+  // 4. handleVerify2FA com pani_token e pani_user
   const handleVerify2FA = async (e: React.FormEvent) => {
     e.preventDefault();
     if (loading) return;
@@ -302,10 +327,10 @@ export default function PaniLogin() {
     try {
       const data = await api.verify2FA(userId, codigo2FA);
       if (!data.success) { setError(data.error); return; }
-      localStorage.setItem('user_token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.setItem('pani_token', data.token);
+      localStorage.setItem('pani_user', JSON.stringify(data.user));
       if (data.user?.role === 'admin') navigate('/paineladmin', { replace: true });
-      else navigate('/', { replace: true });
+      else navigate('/painelcliente', { replace: true });
     } catch (err: any) {
       setError(err.message || 'Erro de conexão');
     } finally { setLoading(false); }
@@ -476,7 +501,7 @@ export default function PaniLogin() {
     <div className="min-h-screen flex flex-col md:flex-row overflow-hidden bg-background">
       <Popup />
 
-            {/* Lado ESQUERDO - Modal Central com cores do Auth.tsx (bg-card, border-border) */}
+      {/* Lado ESQUERDO - Modal Central com cores do Auth.tsx (bg-card, border-border) */}
       <div className="w-full md:w-1/2 flex items-center justify-center p-4 min-h-screen">
         <div className="w-full max-w-sm">
           <div className="bg-card rounded-2xl border border-border shadow-lg overflow-hidden">
