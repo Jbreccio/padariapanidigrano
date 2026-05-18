@@ -10,27 +10,48 @@ import {
 } from 'lucide-react';
 import { products as initialProducts, ProdutoAdmin, loadProducts, categories, Category } from '../data/products';
 
-// ============================================
+/// ============================================
 // 🖼️ FUNÇÃO PARA CORRIGIR URL DO R2
 // ============================================
+const R2_PUBLIC_URL =
+  'https://pub-7a286fb65b2f4f6f9a262893f0106232.r2.dev';
+
 const getImageUrl = (url: string): string => {
   if (!url || typeof url !== 'string') return '';
+
   const trimmed = url.trim();
+
   if (!trimmed) return '';
-  if (trimmed.startsWith('https://pub-') && trimmed.includes('.r2.dev')) return trimmed;
-  if (trimmed.startsWith('/r2/')) return `https://pub-a7cc8a4d3af3406aac2a13dacc039fb5.r2.dev${trimmed}`;
-  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) return trimmed;
-  return trimmed;
+
+  // Já é URL completa
+  if (
+    trimmed.startsWith('http://') ||
+    trimmed.startsWith('https://')
+  ) {
+    return trimmed;
+  }
+
+  // Caminho relativo vindo do Worker
+  if (trimmed.startsWith('/r2/')) {
+    return `${R2_PUBLIC_URL}${trimmed}`;
+  }
+
+  // Nome puro do arquivo
+  return `${R2_PUBLIC_URL}/${trimmed}`;
 };
 
-// ✅ WORKER_URL: tenta VITE_WORKER_URL, depois VITE_API_URL (mesma var do PaniLogin), depois produção
-const WORKER_URL = (
-  import.meta.env.VITE_WORKER_URL ||
-  import.meta.env.VITE_API_URL ||
-  'https://santuariodefatima.oibreccio.workers.dev/api'
-).replace(/\/$/, ''); // remove trailing slash
+// ============================================
+// ✅ WORKER_URL — DEV E PRODUÇÃO
+// ============================================
+const WORKER_URL = import.meta.env.DEV
+  ? 'http://localhost:8787/api'
+  : (
+      import.meta.env.VITE_WORKER_URL ||
+      'https://padariapanidigrano.oibreccio.workers.dev'
+    );
 
 console.log('🔗 WORKER_URL (PainelAdmin):', WORKER_URL);
+
 
 // ============================================
 // DADOS INICIAIS
